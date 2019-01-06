@@ -51,6 +51,19 @@ var VirtualJoystick	= function(opts)
 	}
 }
 
+function httpGetAsync(theUrl, callback, x, y)
+{
+	var xmlHttp = new XMLHttpRequest();
+	var params = 'x=' + x + '&y=' + y
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+	xmlHttp.open("POST", theUrl, true); // true for asynchronous 
+	console.log("HTTP async triggered: " + params);
+    xmlHttp.send(params);
+}
+
 VirtualJoystick.prototype.destroy	= function()
 {
 	this._container.removeChild(this._baseEl);
@@ -206,7 +219,8 @@ VirtualJoystick.prototype._onMove	= function(x, y)
 				this._stickY = stickNormalizedY * this._stickRadius + this._baseY;
 			} 		
 		}
-		
+			console.log("THIS IS THE X AND Y" + this._stickX +" AND " + this._stickY);
+			httpGetAsync(theUrl, callback, this._stickX, this._stickY);
         	this._move(this._stickEl.style, (this._stickX - this._stickEl.width /2), (this._stickY - this._stickEl.height/2));	
 	}	
 }
